@@ -1,10 +1,10 @@
-import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
-import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
-import { DirectClientInterface } from "@ai16z/client-direct";
-import { DiscordClientInterface } from "@ai16z/client-discord";
-import { AutoClientInterface } from "@ai16z/client-auto";
-import { TelegramClientInterface } from "@ai16z/client-telegram";
-import { TwitterClientInterface } from "@ai16z/client-twitter";
+import { PostgresDatabaseAdapter } from "@okcashpro/adapter-postgres";
+import { SqliteDatabaseAdapter } from "@okcashpro/adapter-sqlite";
+import { DirectClientInterface } from "@okcashpro/client-direct";
+import { DiscordClientInterface } from "@okcashpro/client-discord";
+import { AutoClientInterface } from "@okcashpro/client-auto";
+import { TelegramClientInterface } from "@okcashpro/client-telegram";
+import { TwitterClientInterface } from "@okcashpro/client-twitter";
 import {
   DbCacheAdapter,
   defaultCharacter,
@@ -17,14 +17,14 @@ import {
   Character,
   IAgentRuntime,
   ModelProviderName,
-  elizaLogger,
+  okaiLogger,
   settings,
   IDatabaseAdapter,
   validateCharacterConfig,
-} from "@ai16z/eliza";
-import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
-import { solanaPlugin } from "@ai16z/plugin-solana";
-import { nodePlugin } from "@ai16z/plugin-node";
+} from "@okcashpro/okai";
+import { bootstrapPlugin } from "@okcashpro/plugin-bootstrap";
+import { solanaPlugin } from "@okcashpro/plugin-solana";
+import { nodePlugin } from "@okcashpro/plugin-node";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -32,7 +32,7 @@ import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { character } from "./character.ts";
-import type { DirectClient } from "@ai16z/client-direct";
+import type { DirectClient } from "@okcashpro/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -206,8 +206,8 @@ export function createAgent(
   cache: ICacheManager,
   token: string
 ) {
-  elizaLogger.success(
-    elizaLogger.successesTitle,
+  okaiLogger.success(
+    okaiLogger.successesTitle,
     "Creating runtime for character",
     character.name
   );
@@ -269,7 +269,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
 
     return clients;
   } catch (error) {
-    elizaLogger.error(
+    okaiLogger.error(
       `Error starting agent for character ${character.name}:`,
       error
     );
@@ -295,7 +295,7 @@ const startAgents = async () => {
       await startAgent(character, directClient as DirectClient);
     }
   } catch (error) {
-    elizaLogger.error("Error starting agents:", error);
+    okaiLogger.error("Error starting agents:", error);
   }
 
   function chat() {
@@ -308,12 +308,12 @@ const startAgents = async () => {
     });
   }
 
-  elizaLogger.log("Chat started. Type 'exit' to quit.");
+  okaiLogger.log("Chat started. Type 'exit' to quit.");
   chat();
 };
 
 startAgents().catch((error) => {
-  elizaLogger.error("Unhandled error in startAgents:", error);
+  okaiLogger.error("Unhandled error in startAgents:", error);
   process.exit(1); // Exit the process after logging
 });
 
